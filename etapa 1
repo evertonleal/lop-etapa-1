@@ -1,0 +1,13 @@
+
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  fill(255)
+  rect(0, 0, 400, 400)
+  
+  ellipse(150, 200, 50, 50);
+  rect(120, 90, 50, 50);
+  
+}
