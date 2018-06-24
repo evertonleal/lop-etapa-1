@@ -1,0 +1,135 @@
+var disparo = false, xj, yj;
+var x = 230, y = 450;
+var z = [], v = [];
+var qt = 3;
+var tam = 30
+var vel = []
+var vidas = 3; 
+var pontos = 0;
+var colisao = false
+var nivel = 1;
+var aumentarNivel = true;
+var up = 11
+var img, img2;
+var tela = 1; 
+
+function preload(){
+  img = loadImage('imagens/nave_J2.png')
+  img2 = loadImage('imagens/nave_E3.png')
+}
+
+function setup() {
+  createCanvas(512, 512);
+  frameRate(30)
+  xj = x;
+  yj = y;
+  for(i = 0; i < qt; i++){
+     v[i] = random (50, 350);
+   }
+  for (i = 0; i < qt; i++) {
+    vel[i] = random (3,5);
+  }
+}
+function draw() {
+  if ( tela == 1) {
+    background(0);
+    textSize(32); 
+    fill(135,206,235);
+    text("Press Enter", 50, 160);
+    if (keyIsDown(ENTER)) {
+       tela = 2;  
+  } 
+}
+ if ( tela == 2) {
+  background(0);
+  textSize(32);
+  fill(255,255,255);
+  text("Vidas: "+vidas, 10, 60);
+  text("Pontos: "+pontos, 10, 90);
+  text("Nivel: " + nivel, 250,50);
+
+  if(vidas <= 0){
+    tela = 3
+  }
+  
+    if(keyIsDown(CONTROL) && (! disparo)) {
+      disparo = true;
+      xj = x
+      yj = y
+    }
+  if (disparo) {
+    yj = yj - 65;
+  }
+  if (yj < 0) {
+    disparo = false;
+  }
+  if (disparo) {
+    ellipse (xj, yj, 8, 8);
+  }
+  if (keyIsDown(LEFT_ARROW))
+    x-=10;
+  
+  if (keyIsDown(RIGHT_ARROW))
+    x+=10;
+  if (x == 490) {
+    x = 480;
+  }
+  if (x == 30) {
+    x = 40;
+  }
+  
+  image(img, x, y, 50,50);
+  
+ 
+  
+    if(pontos%20 == 0 && pontos!=0 && aumentarNivel == true) {
+      nivel = nivel + 1;
+      aumentarNivel = false;
+    }
+    if(pontos == up){
+      aumentarNivel = true
+      up+=10;
+    }
+       
+  for (i = 0; i < qt; i++) {
+    if (dist(z[i], v[i], xj, yj) <30) {
+      if (colisao == false) {
+          colisao = true;
+          z[i] = 600;
+          v[i] = 600;
+      }
+      pontos = pontos + 1;
+    } else {
+      colisao = false
+    }
+    if (dist(x, y, z[i], v[i]) <50){
+          z[i] = 600;
+          v[i] = 600;
+     vidas = vidas - 1;
+    }
+  }
+  if(nivel == 2) {
+    vel[i] = vel[i] + 5
+  }
+    
+  for(i = 0; i < qt; i++) {
+    v[i] = v[i] + vel[i];
+    if(v[i] > width) {
+      z[i] = random (30, 500);
+    }
+    if(v[i] > width) {
+      v[i] = random(-250, -50);
+    }
+     image(img2,z[i],v[i],tam,tam);
+   }
+  }
+  if ( tela == 3) {
+    background(0);
+    textSize(32); 
+    fill(135,206,235);
+    text("Game Over", 220, 200);
+    if (keyIsDown(ENTER) ) {
+       tela = 2;  
+    } 
+  }
+}
